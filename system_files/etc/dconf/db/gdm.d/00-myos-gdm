@@ -1,0 +1,6 @@
+[org/gnome/login-screen]
+logo='/usr/share/pixmaps/myos-logo.svg'
+
+[org/gnome/desktop/interface]
+font-name='Inter 11'
+icon-theme='Papirus'

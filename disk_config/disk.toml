@@ -1,0 +1,9 @@
+# For qcow2/raw VM test images (`just qcow2`). Test-only credentials: tester / tester.
+[[customizations.user]]
+name = "tester"
+password = "tester"
+groups = ["wheel"]
+
+[[customizations.filesystem]]
+mountpoint = "/"
+minsize = "40 GiB"

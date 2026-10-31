@@ -1,0 +1,23 @@
+# @MYOS_NAME@ Plymouth theme: dark gradient, centred logo with a gentle breathing pulse.
+Window.SetBackgroundTopColor(0.043, 0.047, 0.102);
+Window.SetBackgroundBottomColor(0.078, 0.039, 0.133);
+
+logo.image  = Image("logo.png");
+logo.sprite = Sprite(logo.image);
+logo.x = Window.GetX() + Window.GetWidth()  / 2 - logo.image.GetWidth()  / 2;
+logo.y = Window.GetY() + Window.GetHeight() / 2 - logo.image.GetHeight() / 2;
+logo.sprite.SetPosition(logo.x, logo.y, 10);
+
+frame = 0;
+fun refresh_callback() {
+    frame++;
+    # Triangle wave 0.55 .. 1.0 over ~2 seconds (50 fps)
+    phase = (frame % 100) / 100;
+    if (phase < 0.5) level = phase * 2; else level = (1 - phase) * 2;
+    logo.sprite.SetOpacity(0.55 + 0.45 * level);
+}
+Plymouth.SetRefreshFunction(refresh_callback);
+
+# Dim to black quickly when the splash quits
+fun quit_callback() { logo.sprite.SetOpacity(0.0); }
+Plymouth.SetQuitFunction(quit_callback);

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=@MYOS_NAME@ Welcome
+Exec=/usr/libexec/myos/welcome.sh
+X-GNOME-Autostart-Delay=6
+X-GNOME-Autostart-enabled=true
+NoDisplay=true

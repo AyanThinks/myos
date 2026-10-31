@@ -1,0 +1,89 @@
+name: Build ISO
+on:
+  workflow_dispatch:
+    inputs:
+      variant:
+        description: 'Image variant'
+        type: choice
+        options: ['default', 'nvidia']
+        default: 'default'
+      release_tag:
+        description: 'Attach ISO parts to this GitHub release tag (empty = artifact only)'
+        type: string
+        default: ''
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  iso:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+    permissions:
+      contents: write
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve image reference
+        run: |
+          set -a; source config/os.env; set +a
+          suffix=""; [ "${{ inputs.variant }}" = "nvidia" ] && suffix="-nvidia"
+          OWNER="${GITHUB_REPOSITORY_OWNER,,}"
+          echo "IMAGE_NAME=${MYOS_ID}${suffix}" >> "$GITHUB_ENV"
+          echo "MYOS_NAME=${MYOS_NAME}" >> "$GITHUB_ENV"
+          echo "IMAGE_REF=${REGISTRY}/${OWNER}/${MYOS_ID}${suffix}:latest" >> "$GITHUB_ENV"
+
+      - name: Free disk space (ISO builds need ~60 GB)
+        uses: ublue-os/remove-unwanted-software@v9
+
+      - name: Render iso.toml
+        run: sed -i "s|@IMAGE_REF@|${IMAGE_REF}|g" disk_config/iso.toml && cat disk_config/iso.toml
+
+      - name: Log in to GHCR (root podman, used by bootc-image-builder)
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | sudo podman login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Build ISO
+        uses: osbuild/bootc-image-builder-action@v4
+        with:
+          config-file: ./disk_config/iso.toml
+          image: ${{ env.IMAGE_REF }}
+          chown: true
+          types: anaconda-iso
+          additional-args: --use-librepo=True
+
+      - name: Collect ISO, checksum and split parts
+        run: |
+          iso="$(find output -name '*.iso' | head -n1)"
+          [ -n "$iso" ] || { echo "no ISO produced"; exit 1; }
+          mkdir -p dist
+          name="${IMAGE_NAME}-$(date -u +%Y%m%d)"
+          mv "$iso" "dist/${name}.iso"
+          (cd dist && sha256sum "${name}.iso" > "${name}.iso.sha256")
+          # GitHub release assets are capped at 2 GiB each, so ship split parts.
+          (cd dist && split -b 1900M -d --additional-suffix=.part "${name}.iso" "${name}.iso." && ls -lh)
+          echo "ISO_NAME=${name}" >> "$GITHUB_ENV"
+          cat > "dist/JOIN.txt" <<TXT
+          Join the parts, then verify:
+            cat ${name}.iso.*.part > ${name}.iso
+            sha256sum -c ${name}.iso.sha256
+          TXT
+
+      - name: Upload workflow artifact (full ISO)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ISO_NAME }}
+          path: |
+            dist/${{ env.ISO_NAME }}.iso
+            dist/${{ env.ISO_NAME }}.iso.sha256
+          compression-level: 0
+          retention-days: 14
+
+      - name: Attach parts to release
+        if: inputs.release_tag != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.release_tag }}
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "${MYOS_NAME} ${TAG}" --notes "Bootable installer ISO (split into parts, see JOIN.txt)."
+          gh release upload "$TAG" dist/*.part dist/*.sha256 dist/JOIN.txt --clobber

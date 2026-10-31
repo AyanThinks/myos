@@ -1,0 +1,1 @@
+# RPM packages to remove from the Bazzite base (one per line). Empty by default.

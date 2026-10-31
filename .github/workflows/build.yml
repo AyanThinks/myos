@@ -1,0 +1,94 @@
+name: Build image
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**/*.md', 'docs/**']
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '17 9 * * *'     # daily: pick up new Bazzite builds
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build:
+    name: ${{ matrix.suffix == '' && 'default (AMD/Intel)' || matrix.suffix }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suffix: ""
+            base: ghcr.io/ublue-os/bazzite-gnome
+          - suffix: "-nvidia"
+            base: ghcr.io/ublue-os/bazzite-gnome-nvidia-open   # check Bazzite's current variant names
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Load config/os.env
+        run: |
+          set -a; source config/os.env; set +a
+          echo "IMAGE_NAME=${MYOS_ID}${{ matrix.suffix }}" >> "$GITHUB_ENV"
+          echo "BASE_TAG=${BASE_TAG}" >> "$GITHUB_ENV"
+          echo "OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> "$GITHUB_ENV"
+          echo "DATE=$(date -u +%Y%m%d)" >> "$GITHUB_ENV"
+
+      - name: Free disk space
+        uses: ublue-os/remove-unwanted-software@v9
+
+      - name: Build image
+        id: build
+        uses: redhat-actions/buildah-build@v2
+        with:
+          containerfiles: ./Containerfile
+          image: ${{ env.IMAGE_NAME }}
+          tags: latest ${{ env.DATE }}
+          build-args: |
+            BASE_IMAGE=${{ matrix.base }}
+            BASE_TAG=${{ env.BASE_TAG }}
+            IMAGE_OWNER=${{ env.OWNER }}
+            IMAGE_NAME=${{ env.IMAGE_NAME }}
+          layers: false
+          oci: false
+
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request'
+        uses: redhat-actions/podman-login@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to GHCR
+        id: push
+        if: github.event_name != 'pull_request'
+        uses: redhat-actions/push-to-registry@v2
+        with:
+          image: ${{ steps.build.outputs.image }}
+          tags: ${{ steps.build.outputs.tags }}
+          registry: ${{ env.REGISTRY }}/${{ env.OWNER }}
+
+      - name: Install cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@v3
+
+      - name: Sign image (skipped when SIGNING_SECRET is not set)
+        if: github.event_name != 'pull_request'
+        env:
+          COSIGN_PRIVATE_KEY: ${{ secrets.SIGNING_SECRET }}
+          COSIGN_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+          DIGEST: ${{ steps.push.outputs.digest }}
+        run: |
+          if [ -z "$COSIGN_PRIVATE_KEY" ]; then echo "No SIGNING_SECRET; leaving the image unsigned."; exit 0; fi
+          cosign sign -y --key env://COSIGN_PRIVATE_KEY "${REGISTRY}/${OWNER}/${IMAGE_NAME}@${DIGEST}"

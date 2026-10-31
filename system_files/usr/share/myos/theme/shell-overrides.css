@@ -1,0 +1,32 @@
+/* @MYOS_NAME@ GNOME Shell overrides: big radii, soft shadows, glass-friendly translucency. */
+#panel { background-color: transparent; }
+
+/* Floating pill taskbar (Dash to Panel) */
+#dashtopanelMainPanel, .dashtopanelMainPanel { border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.28); }
+#dashtopanelScrollview .app-well-app, #dashtopanelScrollview .overview-icon { border-radius: 16px; }
+#dashtopanelScrollview .app-well-app:hover, #dashtopanelScrollview .app-well-app:focus,
+#dashtopanelScrollview .app-well-app:active { background-color: rgba(255,255,255,0.18); border-radius: 16px; }
+#dashtopanelMainPanel .panel-button, #dashtopanelMainPanel .panel-button:hover { border-radius: 16px; }
+
+/* Menus, popovers, Start menu */
+.popup-menu-content, .candidate-popup-content, .app-menu .popup-menu-content { border-radius: 24px; box-shadow: 0 14px 38px rgba(0,0,0,0.32); }
+.popup-menu-item, .popup-sub-menu .popup-menu-item { border-radius: 14px; }
+.arcmenu-menu, .arcmenu-menu .popup-menu-content, .arcmenu-menu .popup-menu-boxpointer { border-radius: 28px; }
+.arcmenu-menu .search-entry, .arcmenu-menu StEntry { border-radius: 9999px; }
+.arcmenu-menu .arcmenu-menu-item { border-radius: 14px; }
+
+/* Quick settings, calendar, notifications */
+.quick-settings, .datemenu-popover, .message-list, .calendar { border-radius: 26px; }
+.quick-toggle, .quick-menu-toggle .quick-toggle { border-radius: 9999px; }
+.quick-toggle-arrow, .quick-slider .slider { border-radius: 9999px; }
+.message, .notification-banner, .notification-banner .message { border-radius: 22px; }
+.calendar-day, .calendar-today { border-radius: 9999px; }
+
+/* Overview, search, dash, switcher */
+.search-entry, .overview-search { border-radius: 9999px; }
+.dash-background { border-radius: 30px; }
+.app-folder, .app-folder-dialog, .app-well-app, .overview-tile, .grid-search-result { border-radius: 22px; }
+.switcher-list, .switcher-list .item-box, .osd-window, .modal-dialog, .dialog-list-box { border-radius: 26px; }
+.modal-dialog-button-box .button, .button { border-radius: 14px; }
+.window-picker .window-clone-border, .workspace-thumbnail { border-radius: 18px; }
+.lockscreen .unlock-dialog-box, .login-dialog, .login-dialog-user-list-view { border-radius: 26px; }

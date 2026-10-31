@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
+<wallpapers>
+  <wallpaper deleted="false">
+    <name>@MYOS_NAME@ Aurora</name>
+    <filename>/usr/share/backgrounds/myos/myos-light.png</filename>
+    <filename-dark>/usr/share/backgrounds/myos/myos-dark.png</filename-dark>
+    <options>zoom</options>
+    <shade_type>solid</shade_type>
+    <pcolor>#eef2ff</pcolor>
+    <scolor>#fdf0f8</scolor>
+  </wallpaper>
+</wallpapers>

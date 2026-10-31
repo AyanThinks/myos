@@ -1,0 +1,12 @@
+/* @MYOS_NAME@ rounded look for GTK3 apps (on top of adw-gtk3). */
+window.csd, window.csd decoration { border-radius: 20px; }
+window.maximized, window.tiled, window.fullscreen { border-radius: 0; }
+headerbar, .titlebar { border-radius: 20px 20px 0 0; }
+window.maximized headerbar, window.tiled headerbar { border-radius: 0; }
+button { border-radius: 12px; }
+entry, spinbutton { border-radius: 12px; }
+menu, .popup, popover, popover.background { border-radius: 18px; }
+menuitem, modelbutton { border-radius: 10px; }
+tooltip, tooltip.background { border-radius: 12px; }
+switch, switch slider, scale trough, progressbar trough, progressbar progress { border-radius: 9999px; }
+.card, frame > border, notebook > header tab { border-radius: 14px; }

@@ -1,0 +1,10 @@
+# bootc-image-builder ISO config (Anaconda installer).
+# @IMAGE_REF@ is filled in by the build-iso workflow / `just iso` with your published image.
+# Anaconda still shows disk selection, partitioning (incl. optional encryption), timezone and
+# keyboard. The %post below makes the INSTALLED system track your registry image for updates.
+[customizations.installer.kickstart]
+contents = """
+%post --erroronfail
+bootc switch --mutate-in-place --transport registry @IMAGE_REF@
+%end
+"""

@@ -1,0 +1,29 @@
+/* @MYOS_NAME@ rounded look for libadwaita / GTK4. Loaded via ~/.config/gtk-4.0/gtk.css.
+   Shape only: colours and light/dark stay with libadwaita so the Settings toggle works. */
+window.csd, window.csd decoration, window.csd.background { border-radius: 22px; }
+window.maximized, window.fullscreen, window.tiled, window.tiled-left, window.tiled-right { border-radius: 0; }
+headerbar { border-radius: 22px 22px 0 0; min-height: 46px; }
+window.maximized headerbar, window.tiled headerbar { border-radius: 0; }
+
+button, menubutton > button, splitbutton > button { border-radius: 14px; padding: 6px 14px; }
+button.circular, button.pill.circular { border-radius: 9999px; }
+button.pill, button.suggested-action.pill { border-radius: 9999px; padding: 8px 22px; }
+
+entry, spinbutton, searchbar > revealer > box, dropdown > button, .view.rich-text, textview { border-radius: 14px; }
+entry { min-height: 38px; padding: 0 12px; }
+
+popover > contents, popover.menu > contents { border-radius: 22px; padding: 6px; }
+popover modelbutton, popover.menu modelbutton, row.activatable { border-radius: 12px; }
+
+.card, list.boxed-list, .boxed-list, .osd, .toast, preferencespage > scrolledwindow > viewport > clamp > box > preferencesgroup > box > list { border-radius: 22px; }
+list.boxed-list > row:first-child { border-top-left-radius: 22px; border-top-right-radius: 22px; }
+list.boxed-list > row:last-child  { border-bottom-left-radius: 22px; border-bottom-right-radius: 22px; }
+
+dialog.message window, window.dialog.message, window.dialog, messagedialog { border-radius: 26px; }
+messagedialog button { border-radius: 14px; }
+tooltip, tooltip.background { border-radius: 14px; }
+switch { border-radius: 9999px; }
+switch slider { border-radius: 9999px; }
+progressbar trough, progressbar progress, scale trough, scale highlight, levelbar trough, levelbar block { border-radius: 9999px; }
+tabbar tab, tab { border-radius: 12px; }
+sidebar, .sidebar, .navigation-sidebar row { border-radius: 12px; }

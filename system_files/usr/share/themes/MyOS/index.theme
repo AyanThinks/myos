@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=MyOS
+Comment=@MYOS_NAME@ rounded glass theme (adw-gtk3 base + GNOME Shell overrides)
+
+[X-GNOME-Metatheme]
+GtkTheme=MyOS
+MetacityTheme=MyOS

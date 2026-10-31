@@ -1,0 +1,7 @@
+# Flatpaks installed system-wide at first boot (flathub). One app id per line.
+com.brave.Browser
+com.github.tchx84.Flatseal
+com.mattjakeman.ExtensionManager
+io.github.kolunmi.Bazaar
+net.nokyan.Resources
+com.vysp3r.ProtonPlus

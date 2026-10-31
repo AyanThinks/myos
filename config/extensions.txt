@@ -1,0 +1,11 @@
+# GNOME Shell extensions placed in /usr/share/gnome-shell/extensions (system-wide).
+# Fetched from extensions.gnome.org for the GNOME version in the base image at build time.
+# Already-present extensions (shipped by Bazzite or an RPM) are left alone.
+dash-to-panel@jderose9.github.com
+arcmenu@arcmenu.com
+blur-my-shell@aunetx
+search-light@icedman.github.com
+gtk4-ding@smedius.gitlab.com
+tiling-assistant@leleat-on-github
+appindicatorsupport@rgcjonas.gmail.com
+user-theme@gnome-shell-extensions.gcampax.github.com

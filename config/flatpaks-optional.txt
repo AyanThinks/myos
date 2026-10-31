@@ -1,0 +1,9 @@
+# Offered as a checklist by the first-login welcome wizard (installed per-user).
+# Format: app-id|Label
+org.videolan.VLC|VLC media player
+com.discordapp.Discord|Discord
+com.obsproject.Studio|OBS Studio
+org.libreoffice.LibreOffice|LibreOffice
+net.lutris.Lutris|Lutris
+com.heroicgameslauncher.hgl|Heroic Games Launcher
+org.gimp.GIMP|GIMP

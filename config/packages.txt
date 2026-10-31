@@ -1,0 +1,20 @@
+# RPM packages layered on top of Bazzite (one per line, # for comments).
+# Bazzite already ships: Steam, gamescope, MangoHud, Distrobox, Waydroid,
+# CUPS, Bluetooth, fwupd, codecs, Ptyxis, Nautilus, adw-gtk3, GNOME Disks.
+# We list the ones we depend on anyway; installing an installed package is a no-op.
+papirus-icon-theme
+rsms-inter-fonts
+adw-gtk3-theme
+gnome-shell-extension-user-theme
+gnome-tweaks
+gnome-system-monitor
+gnome-disk-utility
+ptyxis
+zenity
+plymouth-plugin-script
+librsvg2-tools
+glib2-devel
+jq
+unzip
+curl
+python3

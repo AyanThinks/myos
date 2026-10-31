@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=@MYOS_NAME@
+Description=@MYOS_NAME@ boot splash
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/myos
+ScriptFile=/usr/share/plymouth/themes/myos/myos.script

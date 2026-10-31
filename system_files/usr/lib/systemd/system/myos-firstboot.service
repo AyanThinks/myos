@@ -1,0 +1,17 @@
+[Unit]
+Description=@MYOS_NAME@ first-boot setup (installs core Flatpaks)
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=!/var/lib/myos/firstboot-done
+
+[Service]
+Type=oneshot
+ExecStart=/usr/libexec/myos/firstboot.sh
+RemainAfterExit=yes
+Restart=on-failure
+RestartSec=60
+StartLimitIntervalSec=0
+TimeoutStartSec=3600
+
+[Install]
+WantedBy=multi-user.target
