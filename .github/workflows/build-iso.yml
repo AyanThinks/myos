@@ -44,7 +44,7 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | sudo podman login ghcr.io -u "${{ github.actor }}" --password-stdin
 
       - name: Build ISO
-        uses: osbuild/bootc-image-builder-action@v4
+        uses: osbuild/bootc-image-builder-action@main
         with:
           config-file: ./disk_config/iso.toml
           image: ${{ env.IMAGE_REF }}
